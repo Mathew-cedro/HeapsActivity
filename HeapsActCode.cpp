@@ -4,7 +4,7 @@
 #include <iostream>
 #include <iomanip> // For formatted output
 #include <string>  // For getline function
-#include <algorithm>
+#include <algorithm> // For the find function
 using namespace std;
 
 // Function to display the main menu and take user input
@@ -32,6 +32,7 @@ void displaythree(const vector<int>& numbertree, const vector<string>& nametree,
     }
     if (index >= numbertree.size()) return;
 
+
     // Recursively print the right child (mirrored for tree-like display)
     displaythree(numbertree, nametree, 2 * index + 2, indent + 4);
 
@@ -41,6 +42,11 @@ void displaythree(const vector<int>& numbertree, const vector<string>& nametree,
 
     // Recursively print the left child
     displaythree(numbertree, nametree, 2 * index + 1, indent + 4);
+
+    // for (int num : numbertree){
+    //     cout << num << " ";
+    // }
+    
 }
 
 // Generic function to swap two elements
@@ -99,6 +105,8 @@ void minheapify(vector<int>& HT, vector<string>& HT2, int index) {
     }
 }
 
+// Sort functions
+
 // Function to build a min heap
 void minheap(vector<int>& HT, vector<string>& HT2) {
     int lastParent = (HT.size() / 2) - 1; // Index of last non-leaf node
@@ -135,7 +143,7 @@ bool heapchoice(vector<int>& HT, vector<string>& HT2) {
 }
 
 // Function to insert a new celebrity and their net worth
-void insert(vector<string>& nametree, vector<int>& Numtree) {
+void insert(vector<string>& nametree, vector<int>& Numtree, bool isminheap) {
     int newNetWorth;
     string newName;
 
@@ -154,12 +162,16 @@ void insert(vector<string>& nametree, vector<int>& Numtree) {
     int current = Numtree.size() - 1;
     while (current > 0) {
         int parent = (current - 1) / 2;
-        if (Numtree[current] > Numtree[parent]) {
+        if ( isminheap && Numtree[current] < Numtree[parent]) {
             swapnumbers(&Numtree[current], &Numtree[parent]);
             swapnumbers(&nametree[current], &nametree[parent]);
             current = parent;
-        } else {
-            break;
+        } else if(!isminheap && Numtree[current] > Numtree[parent]) {
+            swapnumbers(&Numtree[current], &Numtree[parent]);
+            swapnumbers(&nametree[current], &nametree[parent]);
+            current = parent;
+        }else{
+             break;
         }
     }
     cout << "|" << setw(35) << "New value inserted!" << setw(20) << "|\n";
@@ -202,6 +214,8 @@ void deletion(vector<int>& Numtree, vector<string>& nametree, bool isMinHeap) {
 int main() {
     vector<int> numbercheese;
     vector<string> namecheese;
+    // vector<int> numbercheese = {10, 20, 30, 5, 25, 15};
+    // vector<string> namecheese = {"1","2","3","4","5","6"};
     bool isMinHeap = true;  // Default heap type
     bool programRunning = true;
 
@@ -209,7 +223,7 @@ int main() {
         char choice = mainmenu();
         switch (choice) {
             case 'A': case 'a':
-                insert(namecheese, numbercheese);
+                insert(namecheese, numbercheese, isMinHeap);
                 break;
             case 'B': case 'b':
                 isMinHeap = heapchoice(numbercheese, namecheese);
