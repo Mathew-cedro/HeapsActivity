@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip> // For formatted output
 #include <string>  // For getline function
+#include <algorithm>
 using namespace std;
 
 // Function to display the main menu and take user input
@@ -169,10 +170,11 @@ void deletion(vector<int>& Numtree, vector<string>& nametree, bool isMinHeap) {
     string name;
     cout << "Enter the name of the celebrity to be deleted\n";
     cout << "Input: ";
-    cin >> name;
+    cin.ignore(); // Clear buffer
+    getline(cin, name); // Properly read the name
 
     // Search for the node to delete
-    auto it = find(nametree.begin(), nametree.end(), name);
+    auto it = std::find(nametree.begin(), nametree.end(), name);
     if (it != nametree.end()) {
         int index = distance(nametree.begin(), it);
 
@@ -194,6 +196,7 @@ void deletion(vector<int>& Numtree, vector<string>& nametree, bool isMinHeap) {
         cout << "Celebrity not found!\n";
     }
 }
+
 
 // Main function
 int main() {
